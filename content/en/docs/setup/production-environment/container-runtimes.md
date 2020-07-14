@@ -390,6 +390,31 @@ containerd config default > /etc/containerd/config.toml
 systemctl restart containerd
 ```
 {{< /tab >}}
+{{< tab name="Windows (Powershell)" >}}
+
+```powershell
+# (Install containerd)
+### download containerd
+cmd /c curl -OL https://github.com/containerd/containerd/releases/download/v1.4.0-beta.2/containerd-1.4.0-beta.2-windows-amd64.tar.gz
+cmd /c tar xvf .\containerd-1.4.0-beta.2-windows-amd64.tar.gz
+```
+
+```powershell
+### extract and set up
+Copy-Item -Path .\bin -Destination $Env:ProgramFiles\containerd -Recurse -Force
+$path = [Environment]::GetEnvironmentVariable('Path', 'Machine')
+[Environment]::SetEnvironmentVariable("Path", "$path;$Env:ProgramFiles\containerd", 'Machine')
+
+### configure containerd
+.\containerd.exe config default > $Env:ProgramFiles\containerd
+```
+
+```powershell
+# start containerd
+$Env:ProgramFiles\containerd\containerd.exe --register-service
+Start-Service
+```
+{{< /tab >}}
 {{< /tabs >}}
 
 ### systemd
